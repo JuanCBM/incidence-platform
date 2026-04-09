@@ -1,0 +1,10 @@
+Soy un técnico de soporte y tengo la siguiente incidencia abierta:
+
+Título: {{TITULO}}
+Descripción: {{DESCRIPCION}}
+Estado: {{ESTADO}}
+Prioridad: {{PRIORIDAD}}
+Abierta desde: {{FECHA_CREACION}}
+
+Dame una sugerencia concisa de pasos a seguir para resolverla.
+Responde solo con los pasos, sin explicaciones adicionales.
