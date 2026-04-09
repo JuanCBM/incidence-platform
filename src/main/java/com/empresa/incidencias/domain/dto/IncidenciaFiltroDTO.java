@@ -14,4 +14,6 @@ public class IncidenciaFiltroDTO {
     private Prioridad prioridad;
     private int page = 0;
     private int size = 20;
+    private String sort;
+
 }
