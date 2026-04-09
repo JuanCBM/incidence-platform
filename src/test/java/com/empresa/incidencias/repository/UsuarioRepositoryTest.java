@@ -27,10 +27,10 @@ class UsuarioRepositoryTest {
     void setUp() {
         usuarioRepository.deleteAll();
 
-        usuarioRepository.save(usuario("Ana García",    "ana@empresa.com",    Rol.ADMIN));
-        usuarioRepository.save(usuario("Carlos López",  "carlos@empresa.com", Rol.SOPORTE));
-        usuarioRepository.save(usuario("María Pérez",   "maria@empresa.com",  Rol.SOPORTE));
-        usuarioRepository.save(usuario("Juan Martínez", "juan@empresa.com",   Rol.USUARIO));
+        usuarioRepository.save(new UsuarioBuilder().nombre("Ana García").email("ana@empresa.com").rol(Rol.ADMIN).build());
+        usuarioRepository.save(new UsuarioBuilder().nombre("Carlos López").email("carlos@empresa.com").rol(Rol.SOPORTE).build());
+        usuarioRepository.save(new UsuarioBuilder().nombre("María Pérez").email("maria@empresa.com").rol(Rol.SOPORTE).build());
+        usuarioRepository.save(new UsuarioBuilder().nombre("Juan Martínez").email("juan@empresa.com").rol(Rol.USUARIO).build());
     }
 
     // ── findByEmail ────────────────────────────────────────────────────────────
@@ -79,13 +79,14 @@ class UsuarioRepositoryTest {
                 && dto.getEmail() != null);
     }
 
-    // ── helper ────────────────────────────────────────────────────────────────
+    // ── builder ───────────────────────────────────────────────────────────────
 
-    private Usuario usuario(String nombre, String email, Rol rol) {
-        Usuario u = new Usuario();
-        u.setNombre(nombre);
-        u.setEmail(email);
-        u.setRol(rol);
-        return u;
+    static class UsuarioBuilder {
+        private final Usuario usuario = new Usuario();
+
+        UsuarioBuilder nombre(String nombre)  { usuario.setNombre(nombre); return this; }
+        UsuarioBuilder email(String email)    { usuario.setEmail(email);   return this; }
+        UsuarioBuilder rol(Rol rol)           { usuario.setRol(rol);       return this; }
+        Usuario build()                       { return usuario; }
     }
 }

@@ -35,14 +35,14 @@ class IncidenciaRepositoryTest {
         incidenciaRepository.deleteAll();
         usuarioRepository.deleteAll();
 
-        soporte = usuarioRepository.save(usuario("Soporte 1", "soporte@empresa.com", Rol.SOPORTE));
-        usuario = usuarioRepository.save(usuario("Usuario 1", "usuario@empresa.com", Rol.USUARIO));
+        soporte = usuarioRepository.save(new UsuarioBuilder().nombre("Soporte 1").email("soporte@empresa.com").rol(Rol.SOPORTE).build());
+        usuario = usuarioRepository.save(new UsuarioBuilder().nombre("Usuario 1").email("usuario@empresa.com").rol(Rol.USUARIO).build());
 
-        incidenciaRepository.save(incidencia("Error login",     EstadoIncidencia.ABIERTA,     Prioridad.ALTA,   soporte));
-        incidenciaRepository.save(incidencia("Lentitud DB",     EstadoIncidencia.EN_PROGRESO, Prioridad.MEDIA,  soporte));
-        incidenciaRepository.save(incidencia("Pantalla blanca", EstadoIncidencia.ABIERTA,     Prioridad.BAJA,   usuario));
-        incidenciaRepository.save(incidencia("Email roto",      EstadoIncidencia.CERRADA,     Prioridad.CRITICA, soporte));
-        incidenciaRepository.save(incidencia("Bug formulario",  EstadoIncidencia.ABIERTA,     Prioridad.MEDIA,  usuario));
+        incidenciaRepository.save(new IncidenciaBuilder().titulo("Error login").estado(EstadoIncidencia.ABIERTA).prioridad(Prioridad.ALTA).asignado(soporte).build());
+        incidenciaRepository.save(new IncidenciaBuilder().titulo("Lentitud DB").estado(EstadoIncidencia.EN_PROGRESO).prioridad(Prioridad.MEDIA).asignado(soporte).build());
+        incidenciaRepository.save(new IncidenciaBuilder().titulo("Pantalla blanca").estado(EstadoIncidencia.ABIERTA).prioridad(Prioridad.BAJA).asignado(usuario).build());
+        incidenciaRepository.save(new IncidenciaBuilder().titulo("Email roto").estado(EstadoIncidencia.CERRADA).prioridad(Prioridad.CRITICA).asignado(soporte).build());
+        incidenciaRepository.save(new IncidenciaBuilder().titulo("Bug formulario").estado(EstadoIncidencia.ABIERTA).prioridad(Prioridad.MEDIA).asignado(usuario).build());
     }
 
     // ── findByEstado (método derivado) ────────────────────────────────────────
@@ -127,23 +127,28 @@ class IncidenciaRepositoryTest {
         );
     }
 
-    // ── helpers ───────────────────────────────────────────────────────────────
+    // ── builders ──────────────────────────────────────────────────────────────
 
-    private Usuario usuario(String nombre, String email, Rol rol) {
-        Usuario u = new Usuario();
-        u.setNombre(nombre);
-        u.setEmail(email);
-        u.setRol(rol);
-        return u;
+    static class UsuarioBuilder {
+        private final Usuario usuario = new Usuario();
+
+        UsuarioBuilder nombre(String nombre)  { usuario.setNombre(nombre); return this; }
+        UsuarioBuilder email(String email)    { usuario.setEmail(email);   return this; }
+        UsuarioBuilder rol(Rol rol)           { usuario.setRol(rol);       return this; }
+        Usuario build()                       { return usuario; }
     }
 
-    private Incidencia incidencia(String titulo, EstadoIncidencia estado, Prioridad prioridad, Usuario asignado) {
-        Incidencia i = new Incidencia();
-        i.setTitulo(titulo);
-        i.setDescripcion("Descripción de " + titulo);
-        i.setEstado(estado);
-        i.setPrioridad(prioridad);
-        i.setUsuarioAsignado(asignado);
-        return i;
+    static class IncidenciaBuilder {
+        private final Incidencia incidencia = new Incidencia();
+
+        IncidenciaBuilder titulo(String titulo) {
+            incidencia.setTitulo(titulo);
+            incidencia.setDescripcion("Descripción de " + titulo);
+            return this;
+        }
+        IncidenciaBuilder estado(EstadoIncidencia estado)   { incidencia.setEstado(estado);          return this; }
+        IncidenciaBuilder prioridad(Prioridad prioridad)    { incidencia.setPrioridad(prioridad);    return this; }
+        IncidenciaBuilder asignado(Usuario asignado)        { incidencia.setUsuarioAsignado(asignado); return this; }
+        Incidencia build()                                  { return incidencia; }
     }
 }

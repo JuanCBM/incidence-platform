@@ -8,23 +8,21 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public interface IncidenciaRepository extends JpaRepository<Incidencia, Long> {
 
-    // Método derivado — buscar por estado
     List<Incidencia> findByEstado(EstadoIncidencia estado);
 
-    // JPQL explícita — buscar por usuario y estado a la vez
     @Query("SELECT i FROM Incidencia i WHERE i.usuarioAsignado.id = :usuarioId AND i.estado = :estado")
     List<Incidencia> findByUsuarioIdAndEstado(@Param("usuarioId") Long usuarioId,
                                               @Param("estado") EstadoIncidencia estado);
 
-    // Paginada — listar por estado con soporte de Pageable
     Page<Incidencia> findByEstado(EstadoIncidencia estado, Pageable pageable);
 
-    // Filtros combinados opcionales — cada parámetro es opcional (null = ignorar filtro)
     @Query("""
            SELECT i FROM Incidencia i
            WHERE (:usuarioId IS NULL OR i.usuarioAsignado.id = :usuarioId)
