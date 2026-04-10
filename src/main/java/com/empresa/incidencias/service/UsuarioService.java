@@ -10,6 +10,8 @@ public interface UsuarioService {
 
     List<UsuarioResumenDTO> listarUsuarios();
 
+    List<Usuario> listarTodos();
+
     Optional<Usuario> obtenerUsuarioPorId(Long id);
 
     Usuario crearUsuario(Usuario usuario);

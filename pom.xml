@@ -11,6 +11,7 @@
 	<groupId>com.empresa</groupId>
 	<artifactId>incidencias</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
 	<name/>
 	<description/>
 	<url/>
@@ -78,6 +79,11 @@
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 		</dependency>
+		<dependency>
+			<groupId>org.openapitools</groupId>
+			<artifactId>jackson-databind-nullable</artifactId>
+			<version>0.2.6</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -85,6 +91,44 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<mainClass>com.empresa.incidencias.IncidenciasApplication</mainClass>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.openapitools</groupId>
+				<artifactId>openapi-generator-maven-plugin</artifactId>
+				<version>7.4.0</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<inputSpec>${project.basedir}/src/main/resources/openapi.yaml</inputSpec>
+							<generatorName>spring</generatorName>
+							<apiPackage>com.empresa.incidencias.api</apiPackage>
+							<modelPackage>com.empresa.incidencias.model</modelPackage>
+							<typeMappings>
+								<typeMapping>Rol=Rol</typeMapping>
+								<typeMapping>EstadoIncidencia=EstadoIncidencia</typeMapping>
+								<typeMapping>Prioridad=Prioridad</typeMapping>
+							</typeMappings>
+							<importMappings>
+								<importMapping>Rol=com.empresa.incidencias.domain.entity.Rol</importMapping>
+								<importMapping>EstadoIncidencia=com.empresa.incidencias.domain.entity.EstadoIncidencia</importMapping>
+								<importMapping>Prioridad=com.empresa.incidencias.domain.entity.Prioridad</importMapping>
+							</importMappings>
+							<configOptions>
+								<interfaceOnly>true</interfaceOnly>
+								<useTags>true</useTags>
+								<useSpringBoot3>true</useSpringBoot3>
+								<openApiNullable>false</openApiNullable>
+								<dateLibrary>java8-localdatetime</dateLibrary>
+							</configOptions>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

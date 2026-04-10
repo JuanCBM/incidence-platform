@@ -1,12 +1,18 @@
 package com.empresa.incidencias.service;
 
 import com.empresa.incidencias.domain.dto.IncidenciaFiltroDTO;
+import com.empresa.incidencias.domain.entity.EstadoIncidencia;
 import com.empresa.incidencias.domain.entity.Incidencia;
+import com.empresa.incidencias.domain.entity.Prioridad;
+import com.empresa.incidencias.model.IncidenciaCreateDTO;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface IncidenciaService {
+
+    List<Incidencia> listarIncidencias();
 
     Page<Incidencia> buscarIncidencias(IncidenciaFiltroDTO filtro);
 

@@ -1,15 +1,20 @@
 package com.empresa.incidencias.service.impl;
 
 import com.empresa.incidencias.domain.dto.IncidenciaFiltroDTO;
+import com.empresa.incidencias.domain.entity.EstadoIncidencia;
 import com.empresa.incidencias.domain.entity.Incidencia;
+import com.empresa.incidencias.domain.entity.Prioridad;
+import com.empresa.incidencias.model.IncidenciaCreateDTO;
 import com.empresa.incidencias.repository.IncidenciaRepository;
 import com.empresa.incidencias.service.IncidenciaService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,6 +25,11 @@ public class IncidenciaServiceImpl implements IncidenciaService {
 
     public IncidenciaServiceImpl(IncidenciaRepository incidenciaRepository) {
         this.incidenciaRepository = incidenciaRepository;
+    }
+
+    @Override
+    public List<Incidencia> listarIncidencias() {
+        return incidenciaRepository.findAll();
     }
 
     @Override
