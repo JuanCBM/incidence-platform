@@ -22,6 +22,9 @@ class NotificacionServiceImplTest {
     @Mock
     private NotificacionRepository notificacionRepository;
 
+    @Mock
+    private EmailService emailService;
+
     @InjectMocks
     private NotificacionServiceImpl notificacionService;
 

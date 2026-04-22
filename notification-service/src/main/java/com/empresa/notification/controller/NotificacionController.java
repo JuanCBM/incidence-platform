@@ -11,7 +11,6 @@ import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
-@RequestMapping("/notificaciones")
 public class NotificacionController {
 
     private final NotificacionRepository notificacionRepository;
@@ -27,13 +26,9 @@ public class NotificacionController {
      *
      * GET /notificaciones
      */
-    @GetMapping
+    @GetMapping("/notificaciones")
     public ResponseEntity<List<Notificacion>> obtenerActividadReciente() {
-        List<Notificacion> eventos = notificacionRepository.findTop50ByOrderByFechaRecepcionDesc();
-        if (eventos.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(eventos);
+        return ResponseEntity.ok(notificacionRepository.findTop50ByOrderByFechaRecepcionDesc());
     }
 
     /**
@@ -42,13 +37,9 @@ public class NotificacionController {
      *
      * GET /notificaciones/{incidenciaId}
      */
-    @GetMapping("/{incidenciaId}")
+    @GetMapping("/notificaciones/{incidenciaId}")
     public ResponseEntity<List<Notificacion>> obtenerPorIncidencia(@PathVariable Long incidenciaId) {
-        List<Notificacion> notificaciones = notificacionRepository.findByIncidenciaId(incidenciaId);
-        if (notificaciones.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(notificaciones);
+        return ResponseEntity.ok(notificacionRepository.findByIncidenciaId(incidenciaId));
     }
 
     /**
@@ -57,7 +48,7 @@ public class NotificacionController {
      *
      * GET /notificaciones/{incidenciaId}/log
      */
-    @GetMapping("/{incidenciaId}/log")
+    @GetMapping("/notificaciones/{incidenciaId}/log")
     public ResponseEntity<byte[]> descargarLog(@PathVariable Long incidenciaId) {
         List<Notificacion> notificaciones = notificacionRepository.findByIncidenciaId(incidenciaId);
 
