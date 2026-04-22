@@ -15,11 +15,12 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class IncidenciaEventoDTO {
 
-    private String tipoEvento;
+    private String evento;
     private Long incidenciaId;
     private String titulo;
     private EstadoIncidencia estado;
     private Prioridad prioridad;
     private Long usuarioId;
+    private String emailUsuario;
     private LocalDateTime timestamp;
 }

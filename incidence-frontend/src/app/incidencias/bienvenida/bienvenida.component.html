@@ -1,0 +1,37 @@
+<mat-toolbar color="primary">
+  <mat-icon>report_problem</mat-icon>
+  <span class="toolbar-title">Plataforma de Incidencias</span>
+  <span class="spacer"></span>
+  <span class="toolbar-email">{{ nombreUsuario }}</span>
+  <button mat-icon-button (click)="cerrarSesion()" matTooltip="Cerrar sesión">
+    <mat-icon>logout</mat-icon>
+  </button>
+</mat-toolbar>
+
+<div class="bienvenida-container">
+  <mat-card class="bienvenida-card">
+
+    <mat-card-content class="bienvenida-content">
+      <mat-icon class="bienvenida-icon">verified_user</mat-icon>
+      <h1>¡Bienvenido!</h1>
+      <p class="subtitulo">Has accedido a la plataforma de gestión de incidencias.</p>
+      <p class="email-texto">Conectado como <strong>{{ nombreUsuario }}</strong></p>
+
+      <div class="botones">
+        <button mat-raised-button color="primary" class="btn-accion" (click)="verIncidencias()">
+          <mat-icon>list_alt</mat-icon>
+          Ver incidencias
+        </button>
+        <button mat-stroked-button color="primary" class="btn-accion" (click)="verUsuarios()">
+          <mat-icon>people</mat-icon>
+          Ver usuarios
+        </button>
+        <button mat-stroked-button color="accent" class="btn-accion" (click)="verActividad()">
+          <mat-icon>timeline</mat-icon>
+          Actividad reciente
+        </button>
+      </div>
+    </mat-card-content>
+
+  </mat-card>
+</div>

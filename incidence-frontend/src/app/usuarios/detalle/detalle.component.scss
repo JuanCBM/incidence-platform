@@ -1,0 +1,40 @@
+.toolbar-title { margin-left: 8px; font-size: 1.1rem; }
+.toolbar-email { font-size: 0.85rem; opacity: 0.85; margin-right: 8px; }
+.spacer { flex: 1 1 auto; }
+
+.detalle-container {
+  padding: 24px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.estado-centro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-top: 80px;
+  color: #666;
+}
+
+.icono-error { font-size: 64px; width: 64px; height: 64px; color: #e53935; }
+
+.divider { margin: 16px 0; }
+
+.campo {
+  margin-bottom: 20px;
+  .etiqueta {
+    font-size: 0.78rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: block;
+    margin-bottom: 4px;
+  }
+  p { margin: 0; color: #333; }
+}
+
+.chip-rol { padding: 4px 12px; border-radius: 16px; font-size: 0.78rem; font-weight: 500; }
+.chip-admin   { background-color: #1976d2; color: white; }
+.chip-soporte { background-color: #7b1fa2; color: white; }
+.chip-usuario { background-color: #388e3c; color: white; }

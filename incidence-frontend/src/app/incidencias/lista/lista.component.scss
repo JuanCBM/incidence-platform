@@ -1,0 +1,87 @@
+.toolbar-title {
+  margin-left: 8px;
+  font-size: 1.1rem;
+}
+
+.toolbar-email {
+  font-size: 0.85rem;
+  opacity: 0.85;
+  margin-right: 8px;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.lista-container {
+  padding: 24px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.estado-centro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-top: 80px;
+  color: #666;
+
+  .icono-error {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    color: #e53935;
+  }
+
+  .icono-vacio {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    color: #bbb;
+  }
+}
+
+.tabla-card {
+  padding: 0;
+  overflow: hidden;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.fila-hover:hover {
+  background-color: #f5f5f5;
+  cursor: pointer;
+}
+
+.chip-prioridad {
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 0.78rem;
+  font-weight: 500;
+
+  &.chip-critica { background-color: #b71c1c; color: white; }
+  &.chip-alta    { background-color: #e53935; color: white; }
+  &.chip-media   { background-color: #fb8c00; color: white; }
+  &.chip-baja    { background-color: #43a047; color: white; }
+}
+
+.btn-nuevo { margin-right: 16px; color: white; border-color: white; }
+
+.filtros-card {
+  margin-bottom: 20px;
+  padding: 8px 16px;
+}
+
+.filtros-fila {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  padding: 8px 0;
+
+  .filtro-texto { flex: 1; min-width: 220px; }
+  .filtro-select { min-width: 150px; }
+}

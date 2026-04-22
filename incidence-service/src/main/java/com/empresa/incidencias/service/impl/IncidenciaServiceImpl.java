@@ -68,7 +68,7 @@ public class IncidenciaServiceImpl implements IncidenciaService {
         existente.setPrioridad(incidencia.getPrioridad());
         existente.setUsuarioAsignado(incidencia.getUsuarioAsignado());
         Incidencia actualizada = incidenciaRepository.save(existente);
-        kafkaProducer.publicar(toEvento("INCIDENCIA_ACTUALIZADA", actualizada));
+        kafkaProducer.publicar(toEvento("ESTADO_CAMBIADO", actualizada));
         return actualizada;
     }
 
@@ -82,12 +82,13 @@ public class IncidenciaServiceImpl implements IncidenciaService {
 
     private IncidenciaEventoDTO toEvento(String tipo, Incidencia i) {
         return IncidenciaEventoDTO.builder()
-                .tipoEvento(tipo)
+                .evento(tipo)
                 .incidenciaId(i.getId())
                 .titulo(i.getTitulo())
                 .estado(i.getEstado())
                 .prioridad(i.getPrioridad())
                 .usuarioId(i.getUsuarioAsignado() != null ? i.getUsuarioAsignado().getId() : null)
+                .emailUsuario(i.getUsuarioAsignado() != null ? i.getUsuarioAsignado().getEmail() : null)
                 .timestamp(LocalDateTime.now())
                 .build();
     }

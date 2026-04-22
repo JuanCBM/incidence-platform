@@ -1,0 +1,60 @@
+<mat-toolbar color="primary">
+  <button mat-icon-button (click)="volver()" matTooltip="Volver"><mat-icon>arrow_back</mat-icon></button>
+  <mat-icon>timeline</mat-icon>
+  <span class="toolbar-title">Actividad reciente</span>
+  <span class="spacer"></span>
+  <button mat-icon-button (click)="cargar()" matTooltip="Actualizar"><mat-icon>refresh</mat-icon></button>
+  <span class="toolbar-email">{{ emailUsuario }}</span>
+  <button mat-icon-button (click)="cerrarSesion()" matTooltip="Cerrar sesión"><mat-icon>logout</mat-icon></button>
+</mat-toolbar>
+
+<div class="actividad-container">
+
+  <div *ngIf="cargando" class="estado-centro">
+    <mat-spinner></mat-spinner>
+    <p>Cargando actividad del sistema...</p>
+  </div>
+
+  <div *ngIf="error && !cargando" class="estado-centro">
+    <mat-icon class="icono-error">error_outline</mat-icon>
+    <p>No se pudo cargar la actividad. Comprueba que el servicio de notificaciones está activo.</p>
+    <button mat-raised-button color="primary" (click)="cargar()">Reintentar</button>
+  </div>
+
+  <div *ngIf="!cargando && !error">
+
+    <div *ngIf="eventos.length === 0" class="estado-centro">
+      <mat-icon class="icono-vacio">hourglass_empty</mat-icon>
+      <p>Aún no hay actividad registrada en el sistema.</p>
+    </div>
+
+    <mat-card *ngIf="eventos.length > 0" class="tabla-card">
+      <mat-card-header>
+        <mat-card-title>Últimos {{ eventos.length }} eventos del sistema</mat-card-title>
+        <mat-card-subtitle>Ordenados de más reciente a más antiguo</mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <mat-list>
+          <mat-list-item *ngFor="let e of eventos" class="evento-item" (click)="verIncidencia(e.incidenciaId)">
+
+            <mat-icon matListItemIcon [ngClass]="colorEvento(e.evento)">{{ iconoEvento(e.evento) }}</mat-icon>
+
+            <div matListItemTitle>
+              <span class="evento-tag" [ngClass]="colorEvento(e.evento)">{{ e.evento }}</span>
+              &nbsp;— Incidencia <strong>#{{ e.incidenciaId }}</strong>
+            </div>
+
+            <div matListItemLine class="evento-mensaje">{{ e.mensaje }}</div>
+
+            <div matListItemLine class="evento-fecha">
+              <mat-icon class="icono-fecha">schedule</mat-icon>
+              {{ e.fechaRecepcion | date:'dd/MM/yyyy HH:mm:ss' }}
+            </div>
+
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+    </mat-card>
+
+  </div>
+</div>

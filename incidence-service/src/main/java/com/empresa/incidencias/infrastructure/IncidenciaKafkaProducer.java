@@ -24,7 +24,7 @@ public class IncidenciaKafkaProducer {
                     if (ex != null) {
                         log.error("Error publicando evento Kafka para incidencia {}: {}", evento.getIncidenciaId(), ex.getMessage());
                     } else {
-                        log.info("Evento '{}' publicado para incidencia {}", evento.getTipoEvento(), evento.getIncidenciaId());
+                        log.info("Evento '{}' publicado para incidencia {}", evento.getEvento(), evento.getIncidenciaId());
                     }
                 });
     }

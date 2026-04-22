@@ -1,0 +1,128 @@
+<mat-toolbar color="primary">
+  <button mat-icon-button (click)="volver()" matTooltip="Volver a la lista">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+  <mat-icon>assignment</mat-icon>
+  <span class="toolbar-title">Detalle de incidencia</span>
+  <span class="spacer"></span>
+  <span class="toolbar-email">{{ emailUsuario }}</span>
+  <button mat-icon-button (click)="cerrarSesion()" matTooltip="Cerrar sesión">
+    <mat-icon>logout</mat-icon>
+  </button>
+</mat-toolbar>
+
+<div class="detalle-container">
+
+  <!-- Cargando -->
+  <div *ngIf="cargando" class="estado-centro">
+    <mat-spinner></mat-spinner>
+    <p>Cargando incidencia...</p>
+  </div>
+
+  <!-- Error -->
+  <div *ngIf="error && !cargando" class="estado-centro">
+    <mat-icon class="icono-error">error_outline</mat-icon>
+    <p>No se pudo cargar la incidencia.</p>
+    <button mat-raised-button color="primary" (click)="volver()">Volver a la lista</button>
+  </div>
+
+  <!-- Contenido -->
+  <div *ngIf="!cargando && !error && incidencia">
+
+    <!-- Datos del ticket -->
+    <mat-card class="seccion-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>bug_report</mat-icon>
+        <mat-card-title>{{ incidencia.titulo }}</mat-card-title>
+        <mat-card-subtitle>Incidencia #{{ incidencia.id }}</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div class="chips-row">
+          <span class="chip-estado" [ngClass]="colorEstado(incidencia.estado)">
+            {{ incidencia.estado }}
+          </span>
+          <span class="chip-prioridad" [ngClass]="colorPrioridad(incidencia.prioridad)">
+            {{ incidencia.prioridad }}
+          </span>
+        </div>
+
+        <mat-divider class="divider"></mat-divider>
+
+        <div class="campo">
+          <span class="etiqueta">Descripción</span>
+          <p>{{ incidencia.descripcion }}</p>
+        </div>
+
+        <div class="campos-row">
+          <div class="campo">
+            <span class="etiqueta">Fecha de creación</span>
+            <p>{{ incidencia.fechaCreacion | date:'dd/MM/yyyy HH:mm' }}</p>
+          </div>
+          <div class="campo">
+            <span class="etiqueta">Última actualización</span>
+            <p>{{ incidencia.fechaActualizacion | date:'dd/MM/yyyy HH:mm' }}</p>
+          </div>
+        </div>
+
+        <!-- Cambio de estado -->
+        <div *ngIf="mostrarFormEstado" class="cambio-estado-form">
+          <mat-divider class="divider"></mat-divider>
+          <p class="etiqueta" style="margin-top:16px">Cambiar estado</p>
+          <div class="cambio-estado-fila">
+            <mat-form-field appearance="outline" style="min-width:200px">
+              <mat-label>Nuevo estado</mat-label>
+              <mat-select [formControl]="estadoControl">
+                <mat-option *ngFor="let e of estados" [value]="e">{{ e }}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <button mat-raised-button color="primary" (click)="guardarEstado()" [disabled]="actualizando || estadoControl.invalid">
+              <mat-icon>check</mat-icon> {{ actualizando ? 'Guardando...' : 'Confirmar' }}
+            </button>
+            <button mat-button (click)="cancelarCambioEstado()">Cancelar</button>
+          </div>
+          <p *ngIf="errorActualizar" class="error-texto">No se pudo actualizar el estado. Inténtalo de nuevo.</p>
+        </div>
+
+      </mat-card-content>
+
+      <mat-card-actions *ngIf="!mostrarFormEstado">
+        <button mat-stroked-button color="accent" (click)="abrirCambioEstado()">
+          <mat-icon>edit</mat-icon> Cambiar estado
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+    <!-- Historial de eventos -->
+    <mat-card class="seccion-card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar>history</mat-icon>
+        <mat-card-title>Historial de eventos</mat-card-title>
+        <mat-card-subtitle>Actividad registrada por el sistema</mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <div *ngIf="notificaciones.length === 0" class="sin-eventos">
+          <mat-icon>hourglass_empty</mat-icon>
+          <p>Aún no hay eventos registrados para esta incidencia.</p>
+        </div>
+
+        <mat-list *ngIf="notificaciones.length > 0">
+          <mat-list-item *ngFor="let n of notificaciones" class="evento-item">
+            <mat-icon matListItemIcon>notifications</mat-icon>
+            <div matListItemTitle class="evento-titulo">{{ n.evento }}</div>
+            <div matListItemLine class="evento-fecha">{{ n.fechaRecepcion | date:'dd/MM/yyyy HH:mm:ss' }}</div>
+          </mat-list-item>
+        </mat-list>
+      </mat-card-content>
+
+      <mat-card-actions *ngIf="notificaciones.length > 0">
+        <button mat-stroked-button color="primary" (click)="descargarLog()">
+          <mat-icon>download</mat-icon>
+          Descargar log completo
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+  </div>
+</div>

@@ -1,0 +1,29 @@
+<div class="login-container">
+  <mat-card class="login-card">
+
+    <mat-card-header>
+      <mat-icon mat-card-avatar>report_problem</mat-icon>
+      <mat-card-title>Plataforma de Incidencias</mat-card-title>
+      <mat-card-subtitle>Introduce tu correo para acceder</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="loginForm" (ngSubmit)="entrar()">
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Correo electrónico</mat-label>
+          <input matInput type="email" formControlName="email" placeholder="usuario@empresa.com">
+          <mat-icon matSuffix>email</mat-icon>
+          <mat-error *ngIf="emailInvalido">Introduce un correo válido</mat-error>
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" type="submit" class="full-width"
+                [disabled]="loginForm.invalid">
+          Entrar
+        </button>
+
+      </form>
+    </mat-card-content>
+
+  </mat-card>
+</div>
