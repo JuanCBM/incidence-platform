@@ -1,0 +1,36 @@
+.toolbar-title { margin-left: 8px; font-size: 1.1rem; }
+.toolbar-email { font-size: 0.85rem; opacity: 0.85; margin-right: 8px; }
+.spacer { flex: 1 1 auto; }
+
+.form-container {
+  padding: 24px;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.full-width {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.campos-fila {
+  display: flex;
+  gap: 16px;
+  .campo-mitad { flex: 1; }
+}
+
+.acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.error-msg {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #e53935;
+  margin-bottom: 12px;
+  font-size: 0.9rem;
+}

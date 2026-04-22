@@ -1,0 +1,129 @@
+.toolbar-title {
+  margin-left: 8px;
+  font-size: 1.1rem;
+}
+
+.toolbar-email {
+  font-size: 0.85rem;
+  opacity: 0.85;
+  margin-right: 8px;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.detalle-container {
+  padding: 24px;
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.estado-centro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-top: 80px;
+  color: #666;
+
+  .icono-error {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    color: #e53935;
+  }
+}
+
+.seccion-card {
+  width: 100%;
+}
+
+.chips-row {
+  display: flex;
+  gap: 8px;
+  margin: 16px 0 8px;
+}
+
+.chip-estado, .chip-prioridad {
+  padding: 4px 14px;
+  border-radius: 16px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.chip-abierta   { background-color: #e53935; color: white; }
+.chip-progreso  { background-color: #fb8c00; color: white; }
+.chip-cerrada   { background-color: #43a047; color: white; }
+
+.chip-critica { background-color: #b71c1c; color: white; }
+.chip-alta    { background-color: #e53935; color: white; }
+.chip-media   { background-color: #fb8c00; color: white; }
+.chip-baja    { background-color: #43a047; color: white; }
+
+.divider {
+  margin: 16px 0;
+}
+
+.campo {
+  margin-bottom: 16px;
+
+  .etiqueta {
+    font-size: 0.78rem;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  p {
+    margin: 0;
+    color: #333;
+  }
+}
+
+.campos-row {
+  display: flex;
+  gap: 32px;
+}
+
+.sin-eventos {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #aaa;
+  padding: 16px 0;
+
+  mat-icon { color: #ccc; }
+}
+
+.evento-item {
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.evento-titulo {
+  font-weight: 500;
+}
+
+.evento-fecha {
+  font-size: 0.8rem;
+  color: #888;
+}
+
+.cambio-estado-fila {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.error-texto {
+  color: #e53935;
+  font-size: 0.85rem;
+  margin-top: 4px;
+}

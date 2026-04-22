@@ -1,0 +1,77 @@
+.toolbar-title {
+  margin-left: 8px;
+  font-size: 1.1rem;
+}
+
+.toolbar-email {
+  font-size: 0.85rem;
+  opacity: 0.85;
+  margin-right: 8px;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.bienvenida-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 64px);
+  background-color: #f5f5f5;
+}
+
+.bienvenida-card {
+  width: 100%;
+  max-width: 480px;
+  padding: 24px;
+  text-align: center;
+}
+
+.bienvenida-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+
+  .bienvenida-icon {
+    font-size: 72px;
+    width: 72px;
+    height: 72px;
+    color: #1976d2;
+  }
+
+  h1 {
+    margin: 0;
+    font-size: 2rem;
+    color: #333;
+  }
+
+  .subtitulo {
+    color: #666;
+    margin: 0;
+  }
+
+  .email-texto {
+    color: #444;
+    margin: 0;
+  }
+
+  .botones {
+    display: flex;
+    gap: 16px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .btn-accion {
+    padding: 0 24px;
+    height: 48px;
+    font-size: 1rem;
+
+    mat-icon {
+      margin-right: 8px;
+    }
+  }
+}

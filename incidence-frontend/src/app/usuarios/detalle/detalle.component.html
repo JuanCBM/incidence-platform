@@ -1,0 +1,49 @@
+<mat-toolbar color="primary">
+  <button mat-icon-button (click)="volver()" matTooltip="Volver"><mat-icon>arrow_back</mat-icon></button>
+  <mat-icon>person</mat-icon>
+  <span class="toolbar-title">Detalle de usuario</span>
+  <span class="spacer"></span>
+  <span class="toolbar-email">{{ emailUsuario }}</span>
+  <button mat-icon-button (click)="cerrarSesion()" matTooltip="Cerrar sesión"><mat-icon>logout</mat-icon></button>
+</mat-toolbar>
+
+<div class="detalle-container">
+
+  <div *ngIf="cargando" class="estado-centro"><mat-spinner></mat-spinner></div>
+
+  <div *ngIf="error && !cargando" class="estado-centro">
+    <mat-icon class="icono-error">error_outline</mat-icon>
+    <p>No se pudo cargar el usuario.</p>
+    <button mat-raised-button color="primary" (click)="volver()">Volver a la lista</button>
+  </div>
+
+  <mat-card *ngIf="!cargando && !error && usuario">
+    <mat-card-header>
+      <mat-icon mat-card-avatar>account_circle</mat-icon>
+      <mat-card-title>{{ usuario.nombre }}</mat-card-title>
+      <mat-card-subtitle>Usuario #{{ usuario.id }}</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <mat-divider class="divider"></mat-divider>
+
+      <div class="campo">
+        <span class="etiqueta">Email</span>
+        <p>{{ usuario.email }}</p>
+      </div>
+
+      <div class="campo">
+        <span class="etiqueta">Rol</span>
+        <p>
+          <span class="chip-rol" [ngClass]="colorRol(usuario.rol)">{{ usuario.rol }}</span>
+        </p>
+      </div>
+
+      <div class="campo">
+        <span class="etiqueta">Fecha de alta</span>
+        <p>{{ usuario.fechaAlta | date:'dd/MM/yyyy' }}</p>
+      </div>
+    </mat-card-content>
+  </mat-card>
+
+</div>
