@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Notificacion } from '../models/incidencia.model';
+import { Notificacion, NotificacionesResponseDTO } from '../models/incidencia.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,8 +12,8 @@ export class NotificacionService {
 
   constructor(private http: HttpClient) {}
 
-  getActividadReciente(): Observable<Notificacion[]> {
-    return this.http.get<Notificacion[]>(this.apiUrl);
+  getActividadReciente(): Observable<NotificacionesResponseDTO> {
+    return this.http.get<NotificacionesResponseDTO>(this.apiUrl);
   }
 
   getNotificacionesPorIncidencia(incidenciaId: number): Observable<Notificacion[]> {

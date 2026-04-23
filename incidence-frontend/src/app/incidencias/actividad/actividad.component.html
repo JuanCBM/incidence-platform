@@ -28,6 +28,15 @@
       <p>Aún no hay actividad registrada en el sistema.</p>
     </div>
 
+    <div *ngIf="estadoServicio" class="estado-servicio-bar">
+      <mat-icon class="icono-estado">check_circle</mat-icon>
+      <span>Servicio <strong>{{ estadoServicio.estado }}</strong></span>
+      <span class="separador">·</span>
+      <span>Total procesadas: <strong>{{ estadoServicio.totalNotificacionesProcesadas }}</strong></span>
+      <span class="separador">·</span>
+      <span>Actualizado: {{ estadoServicio.ultimaActualizacion | date:'dd/MM/yyyy HH:mm:ss' }}</span>
+    </div>
+
     <mat-card *ngIf="eventos.length > 0" class="tabla-card">
       <mat-card-header>
         <mat-card-title>Últimos {{ eventos.length }} eventos del sistema</mat-card-title>

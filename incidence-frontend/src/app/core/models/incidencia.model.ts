@@ -23,3 +23,14 @@ export interface Notificacion {
   mensaje: string;
   fechaRecepcion: string;
 }
+
+export interface EstadoServicio {
+  totalNotificacionesProcesadas: number;
+  ultimaActualizacion: string;
+  estado: string;
+}
+
+export interface NotificacionesResponseDTO {
+  notificaciones: Notificacion[];
+  estadoServicio: EstadoServicio;
+}

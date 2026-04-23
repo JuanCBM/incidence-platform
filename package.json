@@ -1,0 +1,30 @@
+{
+  "name": "incidence-platform-mcps",
+  "version": "1.0.0",
+  "description": "MCP orchestrator and specialized MCPs for incidence platform",
+  "main": "mcp/orquestador.js",
+  "type": "module",
+  "scripts": {
+    "start": "node mcp/orquestador.js",
+    "dev": "node --watch mcp/orquestador.js",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test:watch": "node --experimental-vm-modules node_modules/jest/bin/jest.js --watch",
+    "test:coverage": "node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "incidence",
+    "notification"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "yaml": "^2.4.5",
+    "xml2js": "^0.6.2"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}

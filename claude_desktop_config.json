@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "incidence-platform": {
+      "command": "node",
+      "args": ["C:\\Users\\miguel.menendez.caro\\Desktop\\Proyectos\\Proyectos personales\\incidence-platform\\mcp\\orquestador.js"]
+    }
+  }
+}
