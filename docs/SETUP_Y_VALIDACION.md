@@ -1,369 +1,256 @@
 # ✅ GUÍA DE SETUP Y VALIDACIÓN
 
-**Paso a paso para levantar y validar la arquitectura MCP**
+**Paso a paso para levantar toda la plataforma y validar la arquitectura MCP**
 
 ---
 
-## 📋 Checklist Pre-Setup
+## 📋 Prerrequisitos
 
 - [ ] Node.js 18+ instalado
+- [ ] Java 17+ instalado
+- [ ] Podman Desktop instalado y corriendo
+- [ ] Python + podman-compose instalado (`pip install podman-compose`)
 - [ ] Git configurado
-- [ ] Acceso a la carpeta `incidence-platform`
 - [ ] Editor de código (VS Code, JetBrains, etc.)
 
 ---
 
-## 🚀 Paso 1: Instalar Dependencias
+## 🐳 Paso 1: Levantar la infraestructura (Podman)
 
-```bash
+### Primera vez o tras cambios en el código Java
+
+```powershell
+# Compilar los JARs
+cd incidence-service
+.\mvnw clean package -DskipTests
+
+cd ..\notification-service
+.\mvnw clean package -DskipTests
+
+# Volver a raíz y levantar reconstruyendo imágenes
+cd ..
+python -m podman_compose up --build -d
+```
+
+### Arranques normales (sin cambios en el código)
+
+```powershell
+# Si Podman Desktop acaba de arrancar
+podman machine start
+
+# Levantar contenedores en segundo plano
 cd incidence-platform
-npm install
+python -m podman_compose up -d
+```
+
+### Verificar que todo está corriendo
+
+```powershell
+podman ps
+```
+
+**Esperado:** 6 contenedores en estado `Up`:
+
+| Contenedor | Puerto |
+|---|---|
+| `incidencias-db` | 5432 |
+| `notificaciones-db` | 5433 |
+| `zookeeper` | 2181 |
+| `kafka` | 9092 |
+| `incidence-service` | 8080 |
+| `notification-service` | 8081 |
+
+### Parar los contenedores
+
+```powershell
+python -m podman_compose down
+```
+
+---
+
+## 🌐 Paso 2: Levantar el Frontend Angular
+
+```powershell
+cd incidence-frontend
+npm install        # solo la primera vez
+npm start          # arranca con proxy configurado automáticamente
 ```
 
 **Esperado:**
 ```
-added 45 packages in 3.5s
+✔ Compiled successfully.
+Application bundle generation complete.
+```
+
+Abrir en el navegador: **http://localhost:4200**
+
+> El proxy está configurado en `angular.json` — redirige automáticamente
+> `/incidencias`, `/usuarios` y `/notificaciones` al backend.
+
+---
+
+## 📦 Paso 3: Instalar dependencias Node (MCPs)
+
+```powershell
+cd incidence-platform
+npm install
 ```
 
 **Verificar:**
-```bash
+```powershell
 npm list @modelcontextprotocol/sdk yaml xml2js
 ```
 
 ---
 
-## 🔍 Paso 2: Verificar Estructura de Archivos
+## 🧪 Paso 4: Probar MCPs individualmente
 
-### Archivos Requeridos
+### MCP Incidencias
 
-```bash
-# Raíz del proyecto
-ls -la | grep -E "(package.json|orquestador|mcp-|claude_desktop)"
+```powershell
+node mcp/mcp-incidencias.js
 ```
 
 **Esperado:**
-
-```
-package.json
-orquestador.js
-mcp-incidencias.js
-mcp-notificaciones.js
-mcp-build.js
-claude_desktop_config.json
-```
-
-### Archivos Java (notification-service)
-
-```bash
-find notification-service -name "NotificacionController.java" -o -name "NotificacionesResponseDTO.java"
-```
-
-**Esperado:**
-
-```
-notification-service/src/main/java/com/empresa/notification/controller/NotificacionController.java
-notification-service/src/main/java/com/empresa/notification/dto/NotificacionesResponseDTO.java
-```
-
----
-
-## 🧪 Paso 3: Probar MCPs Individuales
-
-### Test 1: MCP Incidencias
-
-```bash
-node mcp-incidencias.js
-```
-
-**Esperado (en stderr):**
 ```
 [MCP Incidencias] Parseando openapi.yaml...
 [MCP Incidencias] ✓ openapi.yaml parseado correctamente
 [MCP Incidencias] Servidor iniciado. Escuchando en stdio...
 ```
 
-**Presiona Ctrl+C para salir**
+### MCP Build
 
-### Test 2: MCP Build
-
-```bash
-node mcp-build.js
+```powershell
+node mcp/mcp-build.js
 ```
 
 **Esperado:**
 ```
-[MCP Build] Parseando pom.xml de microservicios...
 [MCP Build] ✓ incidencias parseado
 [MCP Build] ✓ notificaciones parseado
 [MCP Build] ✓ Todos los pom.xml parseados correctamente
 [MCP Build] Servidor iniciado. Escuchando en stdio...
 ```
 
-**Presiona Ctrl+C para salir**
+### MCP Notificaciones *(requiere contenedor)*
 
-### Test 3: MCP Notificaciones
-
-```bash
-node mcp-notificaciones.js
+```powershell
+node mcp/mcp-notificaciones.js
 ```
 
 **Esperado:**
 ```
 [MCP Notificaciones] Servidor iniciado. Escuchando en stdio...
-[MCP Notificaciones] Consultará: http://localhost:8081
+[MCP Notificaciones] Consultará: http://127.0.0.1:8081
 ```
 
-**Presiona Ctrl+C para salir**
+**Presiona Ctrl+C para salir de cada uno.**
 
 ---
 
-## 🎬 Paso 4: Iniciar el Orquestador
+## 🎬 Paso 5: Verificar el Orquestador
 
-```bash
-node orquestador.js
+```powershell
+node mcp/orquestador.js
 ```
 
 **Esperado:**
 ```
-╔═══════════════════════════════════════════════════════════════════╗
-║                  ORQUESTADOR MCP v1.0                            ║
-║              Incidence Platform — GitHub Copilot                 ║
-║                                                                   ║
-║  Punto de entrada único para Copilot/Claude Desktop              ║
-║  Carga MCPs especializados una sola vez en memoria               ║
-║                                                                   ║
-║  https://modelcontextprotocol.io                                 ║
-╚═══════════════════════════════════════════════════════════════════╝
-
-[Orquestador] 🔍 Descubriendo MCPs...
-[Orquestador] ✓ Encontrados 3 MCPs
-[Orquestador] 🚀 Iniciando: incidencias
-[Orquestador] ✓ MCP cargado: incidencias (3 tools)
-[Orquestador] 🚀 Iniciando: build
+[Orquestador] ✓ Encontrados 3 MCPs: mcp-build.js, mcp-incidencias.js, mcp-notificaciones.js
 [Orquestador] ✓ MCP cargado: build (4 tools)
-[Orquestador] 🚀 Iniciando: notificaciones
+[Orquestador] ✓ MCP cargado: incidencias (3 tools)
 [Orquestador] ✓ MCP cargado: notificaciones (2 tools)
-[Orquestador] ✓ 3/3 MCPs cargados
-[Orquestador] 📡 Iniciando servidor stdio...
-[Orquestador] Esperando conexión desde Copilot/Claude...
-
+[Orquestador] ✓ 3/3 MCPs cargados correctamente
 [Orquestador] ✓ Conectado. Servidor activo.
 ```
 
-**Mantén este proceso corriendo. No cierres esta terminal.**
-
 ---
 
-## 🔌 Paso 5: Configurar Claude Desktop
+## 🔌 Paso 6: Configurar Claude Desktop
 
-### En Windows
+El archivo `claude_desktop_config.json` de la raíz del proyecto es una copia de referencia.
+El real está en:
 
-```powershell
-notepad "$env:APPDATA\Claude\claude_desktop_config.json"
+```
+%APPDATA%\Claude\claude_desktop_config.json
 ```
 
-### En macOS/Linux
-
-```bash
-vim ~/.config/Claude/claude_desktop_config.json
-```
-
-### Contenido
+**Contenido correcto:**
 
 ```json
 {
   "mcpServers": {
     "incidence-platform": {
       "command": "node",
-      "args": ["C:\\ruta\\completa\\a\\incidence-platform\\orquestador.js"]
+      "args": ["C:\\ruta\\completa\\incidence-platform\\mcp\\orquestador.js"]
     }
   }
 }
 ```
 
-**Importante:** Reemplaza `C:\\ruta\\completa\\a\\` con la ruta real en tu sistema.
-
-**Para encontrar la ruta:**
-
-```bash
-cd incidence-platform && pwd  # Linux/macOS
-cd incidence-platform && echo %CD%  # Windows
-```
+Después de editar: **cerrar y reabrir Claude Desktop**.
 
 ---
 
-## 🔄 Paso 6: Reiniciar Claude Desktop
+## 🔌 Paso 7: Configurar GitHub Copilot (VS Code)
 
-1. Cierra Claude Desktop completamente
-2. Abre Claude Desktop nuevamente
-3. Espera a que cargue (20-30 segundos)
+El archivo `.vscode/mcp.json` ya está configurado en el proyecto.
+Al abrir VS Code en la carpeta del proyecto, Copilot detectará el servidor automáticamente.
+
+Si no lo detecta: `Ctrl+Shift+P` → `MCP: List Servers`
 
 ---
 
-## 🎯 Paso 7: Probar Prompts
+## 🎯 Paso 8: Probar prompts
 
-En una nueva ventana de Claude Desktop, prueba estos prompts:
-
-### Prompt 1: ¿Qué endpoints expone el incidence-service?
-
-**Esperado:** Lista de todos los endpoints del API
-
-**Logs del Orquestador:**
-```
-[Orquestador] 🔧 Tool solicitada: listar_endpoints
-[Orquestador] → Delegando a MCP: incidencias / listar_endpoints
-[Orquestador] ← Respuesta recibida de incidencias
-```
-
-### Prompt 2: ¿Qué versión de Spring Boot?
-
-**Esperado:** Spring Boot 3.5.13
-
-**Logs:**
-```
-[Orquestador] 🔧 Tool solicitada: obtener_version_spring
-[Orquestador] → Delegando a MCP: build / obtener_version_spring
-```
-
-### Prompt 3: ¿Cuántas notificaciones se han procesado?
-
-**Esperado:** Número total de notificaciones en la BD
-
-**Logs:**
-```
-[Orquestador] 🔧 Tool solicitada: obtener_estado_servicio
-[Orquestador] → Delegando a MCP: notificaciones / obtener_estado_servicio
-```
+| Prompt | MCP | ¿Necesita contenedor? |
+|---|---|---|
+| ¿Qué endpoints expone el incidence-service? | Incidencias | ❌ |
+| ¿Qué schema tiene POST /incidencias? | Incidencias | ❌ |
+| ¿Qué versión de Spring Boot usan los microservicios? | Build | ❌ |
+| ¿Qué versión de Java usan? | Build | ❌ |
+| ¿Qué dependencias de Kafka están configuradas? | Build | ❌ |
+| ¿Cuántas notificaciones se han procesado? | Notificaciones | ✅ |
+| ¿Está disponible el notification-service? | Notificaciones | ✅ |
 
 ---
 
 ## 🐛 Troubleshooting
 
-### El Orquestador no inicia
+### Las tools no aparecen en Claude Desktop
+1. Verifica que el config apunta a `mcp/orquestador.js` (no a `orquestador.js`)
+2. Reinicia Claude Desktop completamente
+3. Comprueba que Node.js está en el PATH del sistema
 
-```bash
-node orquestador.js
-```
-
-**Error:** `Cannot find module '@modelcontextprotocol/sdk'`
-
-**Solución:**
-```bash
+### Error `Cannot find module '@modelcontextprotocol/sdk'`
+```powershell
+cd incidence-platform
 npm install
 ```
 
-**Error:** `openapi.yaml no encontrado`
-
-**Solución:** Verifica que el archivo existe:
-```bash
+### Error `openapi.yaml no encontrado`
+```powershell
 ls incidence-service/src/main/resources/openapi.yaml
 ```
 
----
+### Angular muestra error al cargar datos
+1. Verifica que los contenedores están `Up`: `podman ps`
+2. Verifica que el backend responde: `Invoke-WebRequest http://localhost:8080/usuarios`
+3. Asegúrate de arrancar con `npm start` (tiene el proxy configurado)
 
-### Las tools no aparecen en Claude Desktop
-
-1. **Verifica que el Orquestador está corriendo:**
-   ```bash
-   ps aux | grep orquestador
-   ```
-
-2. **Comprueba la configuración:**
-   ```bash
-   cat ~/.config/Claude/claude_desktop_config.json  # Linux/macOS
-   cat "%APPDATA%\Claude\claude_desktop_config.json"  # Windows
-   ```
-
-3. **Reinicia Claude Desktop** (cierra y abre nuevamente)
-
-4. **Abre la consola de desarrollador en Claude:**
-   - Cmd+Shift+P → "Developer"
-   - Busca logs de conexión al Orquestador
+### MCP Notificaciones devuelve TIMEOUT
+- El contenedor `notification-service` no está corriendo
+- Arranca con `python -m podman_compose up -d`
 
 ---
 
-### Un MCP no responde
+## 📊 Checklist de Éxito
 
-Abre una terminal separada y prueba el MCP:
+- [ ] `podman ps` muestra 6 contenedores `Up`
+- [ ] Angular carga en `http://localhost:4200` con datos
+- [ ] `npm install` completó sin errores (carpeta raíz)
+- [ ] Orquestador detecta 3/3 MCPs
+- [ ] `claude_desktop_config.json` apunta a `mcp/orquestador.js`
+- [ ] Claude Desktop / Copilot responden a al menos 3 prompts de prueba
 
-```bash
-echo '{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{}}' | node mcp-incidencias.js
-```
-
-**Esperado:** JSON con lista de tools
-
----
-
-### Timeout ejecutando una tool
-
-**Posible causa:** El notification-service no está disponible
-
-**Solución:**
-
-1. Asegúrate que notification-service está corriendo en `http://localhost:8081`
-2. Verifica la variable de entorno:
-   ```bash
-   echo $NOTIFICATION_SERVICE_URL  # Linux/macOS
-   echo %NOTIFICATION_SERVICE_URL%  # Windows
-   ```
-
-3. Si necesitas cambiar el URL:
-   ```bash
-   export NOTIFICATION_SERVICE_URL=http://localhost:8081
-   node orquestador.js
-   ```
-
----
-
-## 📊 Validación Final
-
-### Checklist de Éxito
-
-- [ ] `npm install` completó sin errores
-- [ ] Cada MCP inicia sin errores
-- [ ] El Orquestador detecta todos los 3 MCPs
-- [ ] claude_desktop_config.json está configurado
-- [ ] Claude Desktop abre sin errores
-- [ ] Al menos 3 prompts de prueba funcionan
-- [ ] Los logs del Orquestador muestran delegación correcta
-
-**Si todo está checkado:** ✅ **IMPLEMENTACIÓN COMPLETADA**
-
----
-
-## 🎓 Próximos Pasos
-
-1. **Documentar prompts frecuentes:** Crea un archivo con prompts útiles para tu equipo
-2. **Añadir más MCPs:** Copia `mcp-nuevo.js` a `/mcps` y reinicia
-3. **Integración CI/CD:** Valida MCPs en tu pipeline
-4. **Monitoreo:** Agrega logs estructurados (JSON) para análisis
-
----
-
-## 📞 Soporte
-
-Si algo no funciona:
-
-1. **Revisa los logs:** El Orquestador imprime todo en stderr
-2. **Verifica archivos:** openapi.yaml, pom.xml deben existir
-3. **Prueba MCPs aislados:** `node mcp-incidencias.js`
-4. **Lee README.MCP.md:** Documentación completa
-
----
-
-## 🎉 ¡Listo!
-
-Ahora puedes consultar tu arquitectura usando **lenguaje natural desde Claude Desktop o GitHub Copilot**.
-
-```
-Usuario: "¿Qué dependencias de Kafka hay configuradas?"
-         ↓
-Claude: "Consultando MCP Build..."
-         ↓
-MCP Build: Parsea pom.xml
-         ↓
-Claude: "He encontrado spring-kafka versión [...]"
-```
-
-**Disfruta el poder de consultar tu stack técnico con IA.** 🚀
-
+**Si todo está checkado:** ✅ **PLATAFORMA COMPLETAMENTE OPERATIVA**
