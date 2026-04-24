@@ -31,7 +31,12 @@ build/
 
 ### VS Code ###
 .vscode/
+!.vscode/mcp.json
+!.vscode/settings.json
 *.local.json
+
+### Node.js ###
+node_modules/
 
 *.log
 *.class
