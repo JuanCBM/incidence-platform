@@ -1,0 +1,11 @@
+{
+  "servers": {
+    "incidence-platform": {
+      "type": "stdio",
+      "command": "node",
+      "args": [
+        "${workspaceFolder}/mcp/orquestador.js"
+      ]
+    }
+  }
+}

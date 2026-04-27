@@ -1,13 +1,18 @@
 package com.empresa.notification.controller;
 
-import com.empresa.notification.domain.Notificacion;
-import com.empresa.notification.repository.NotificacionRepository;
+import java.util.List;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import com.empresa.notification.domain.Notificacion;
+import com.empresa.notification.dto.NotificacionesResponseDTO;
+import com.empresa.notification.repository.NotificacionRepository;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -21,14 +26,17 @@ public class NotificacionController {
 
     /**
      * Devuelve los 50 eventos más recientes de todo el sistema,
-     * ordenados de más nuevo a más antiguo.
-     * Usado por Angular para el panel de actividad reciente.
+     * ordenados de más nuevo a más antiguo, junto con estadísticas del servicio.
+     * Usado por Angular para el panel de actividad reciente y por MCP Notificaciones.
      *
      * GET /notificaciones
      */
     @GetMapping("/notificaciones")
-    public ResponseEntity<List<Notificacion>> obtenerActividadReciente() {
-        return ResponseEntity.ok(notificacionRepository.findTop50ByOrderByFechaRecepcionDesc());
+    public ResponseEntity<NotificacionesResponseDTO> obtenerActividadReciente() {
+        List<Notificacion> notificaciones = notificacionRepository.findTop50ByOrderByFechaRecepcionDesc();
+        long totalNotificaciones = notificacionRepository.count();
+        
+        return ResponseEntity.ok(new NotificacionesResponseDTO(notificaciones, totalNotificaciones));
     }
 
     /**

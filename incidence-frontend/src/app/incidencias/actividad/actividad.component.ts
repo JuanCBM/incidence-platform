@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Notificacion } from '../../core/models/incidencia.model';
+import { EstadoServicio, Notificacion } from '../../core/models/incidencia.model';
 import { NotificacionService } from '../../core/services/notificacion.service';
 
 @Component({
@@ -12,6 +12,7 @@ import { NotificacionService } from '../../core/services/notificacion.service';
 export class ActividadComponent implements OnInit {
 
   eventos: Notificacion[] = [];
+  estadoServicio: EstadoServicio | null = null;
   cargando = true;
   error = false;
   emailUsuario = '';
@@ -33,7 +34,11 @@ export class ActividadComponent implements OnInit {
     this.cargando = true;
     this.error = false;
     this.notificacionService.getActividadReciente().subscribe({
-      next: (data) => { this.eventos = data; this.cargando = false; },
+      next: (data) => {
+        this.eventos = data.notificaciones;
+        this.estadoServicio = data.estadoServicio;
+        this.cargando = false;
+      },
       error: () => { this.error = true; this.cargando = false; }
     });
   }
